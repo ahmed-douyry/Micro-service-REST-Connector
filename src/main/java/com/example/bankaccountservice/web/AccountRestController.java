@@ -1,7 +1,11 @@
 package com.example.bankaccountservice.web;
 
+import com.example.bankaccountservice.dtos.BankAccountRequestDto;
+import com.example.bankaccountservice.dtos.BankAccountResponseDTO;
 import com.example.bankaccountservice.entities.BankAccount;
+import com.example.bankaccountservice.mappers.AccountMapper;
 import com.example.bankaccountservice.repositories.BankAccountRepository;
+import com.example.bankaccountservice.service.BankAccountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -12,8 +16,12 @@ import java.util.UUID;
 @RequestMapping("/api")
 public class AccountRestController {
     private final BankAccountRepository bankAccountRepository;
-    public AccountRestController(BankAccountRepository bankAccountRepository) {
+    private  final BankAccountService bankAccountService;
+    private final AccountMapper accountMapper;
+    public AccountRestController(BankAccountRepository bankAccountRepository, BankAccountService bankAccountService, AccountMapper accountMapper) {
         this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountService = bankAccountService;
+        this.accountMapper = accountMapper;
     }
     @GetMapping("/bankAccounts")
     public List<BankAccount> bankAccounts(){
@@ -26,9 +34,8 @@ public class AccountRestController {
         ));
     }
     @PostMapping("/bankAccounts")
-    public BankAccount save(@RequestBody  BankAccount bankAccount) {
-        bankAccount.setId(UUID.randomUUID().toString());
-        return bankAccountRepository.save(bankAccount);
+    public BankAccountResponseDTO save(@RequestBody BankAccountRequestDto requestDto) {
+        return bankAccountService.addAccount(requestDto);
     }
     @PutMapping("/bankAccounts/{id}")
     public BankAccount update(@PathVariable String id , @RequestBody BankAccount bankAccount){
