@@ -10,6 +10,9 @@ public class AccountMapper {
     public BankAccountResponseDTO fromBankAccount(BankAccount bankAccount) {
         BankAccountResponseDTO bankAccountResponseDTO = new BankAccountResponseDTO();
         BeanUtils.copyProperties(bankAccount, bankAccountResponseDTO);
+        if (bankAccount.getAccountType() != null) {
+            bankAccountResponseDTO.setAccountType(bankAccount.getAccountType().name());
+        }
         return bankAccountResponseDTO;
     }
 }

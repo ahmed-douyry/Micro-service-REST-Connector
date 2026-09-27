@@ -25,10 +25,29 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .id(UUID.randomUUID().toString())
                 .balance(bankAccountRequestDto.getBalance())
                 .currency(bankAccountRequestDto.getCurrency())
+                .accountType(bankAccountRequestDto.getAccountType())
                 .createdAt(new Date())
                 .build();
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
-        return  accountMapper.fromBankAccount(savedBankAccount);
+        return accountMapper.fromBankAccount(savedBankAccount);
+    }
 
+    @Override
+    public BankAccountResponseDTO updateAccount(String id, BankAccountRequestDto bankAccountRequestDto) {
+        BankAccount bankAccount = bankAccountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        if (bankAccountRequestDto.getBalance() != null) {
+            bankAccount.setBalance(bankAccountRequestDto.getBalance());
+        }
+        if (bankAccountRequestDto.getCurrency() != null) {
+            bankAccount.setCurrency(bankAccountRequestDto.getCurrency());
+        }
+        if (bankAccountRequestDto.getAccountType() != null) {
+            bankAccount.setAccountType(bankAccountRequestDto.getAccountType());
+        }
+
+        BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+        return accountMapper.fromBankAccount(savedBankAccount);
     }
 }

@@ -5,4 +5,7 @@ import com.example.bankaccountservice.dtos.BankAccountResponseDTO;
 
 public interface BankAccountService {
      BankAccountResponseDTO addAccount(BankAccountRequestDto bankAccountRequestDto);
+
+
+     BankAccountResponseDTO updateAccount(String id, BankAccountRequestDto bankAccountRequestDto);
 }
